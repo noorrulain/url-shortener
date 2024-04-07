@@ -6,6 +6,7 @@ import cors from "cors";
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,7 +52,7 @@ app.get("/url/:url", async (req, res) => {
       res.sendStatus(404);
     } else {
       const complete_url = result.rows[0].url;
-      res.redirect(301, `https://${complete_url}`);
+      res.redirect(301, `${complete_url}`);
       //res.send('OK');
     }
 });

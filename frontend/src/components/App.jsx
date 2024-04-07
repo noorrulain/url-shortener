@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 //import "dotenv/config";
 
-const apiUrl = "http://localhost:3000";
+//const apiUrl = "http://localhost:3000";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -10,14 +10,22 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(url);
-    // await axios
-    //   .post("http://localhost:3000/add", [{ 'url': url }])
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    await axios
+      .post(
+        "http://localhost:3000/add",
+        { url },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleChange = (event) => {
