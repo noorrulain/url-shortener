@@ -23,19 +23,28 @@ db.connect();
 
 app.post("/add", async (req, res) => {
   const new_url = req.body.url;
-  console.log(req.body);
+  console.log(new_url);
+  //console.log(req.body);
   let short_url;
   const result = await db.query("SELECT * FROM short_url");
   if (result.rows.length === 0) {
     short_url = 1;
   } else {
-    short_url = result.rows[result.rows.length - 1].short_url + 1;
+    if (new_url.startsWith("http")) {
+      short_url = result.rows[result.rows.length - 1].short_url + 1;
+      await db.query("INSERT INTO short_url(url, short_url) VALUES ($1, $2)", [
+        new_url,
+        short_url,
+      ]);
+      res.json(short_url);
+    } else {
+      const error = {
+        message: "Example error message",
+        status: 400,
+      };
+      res.status(400).json(error);
+    }
   }
-  await db.query("INSERT INTO short_url(url, short_url) VALUES ($1, $2)", [
-    new_url,
-    short_url,
-  ]);
-  res.json(short_url);
 });
 
 app.get("/url/:url", async (req, res) => {
@@ -44,17 +53,17 @@ app.get("/url/:url", async (req, res) => {
   //   console.log(req.params.url);
   const short_url = req.params.url;
   console.log(short_url);
-    const result = await db.query(
-      "SELECT url FROM short_url WHERE short_url = $1",
-      [short_url]
-    );
-    if (result.rows.length === 0) {
-      res.sendStatus(404);
-    } else {
-      const complete_url = result.rows[0].url;
-      res.redirect(301, `${complete_url}`);
-      //res.send('OK');
-    }
+  const result = await db.query(
+    "SELECT url FROM short_url WHERE short_url = $1",
+    [short_url]
+  );
+  if (result.rows.length === 0) {
+    res.sendStatus(404);
+  } else {
+    const complete_url = result.rows[0].url;
+    res.redirect(301, `${complete_url}`);
+    //res.send('OK');
+  }
 });
 
 app.listen(port, () => {
