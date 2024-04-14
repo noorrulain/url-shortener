@@ -67,8 +67,14 @@ function App() {
           </button>
         </form>
       </div>
-      <p ref={myRef}>Your short URL is: </p>
-      {short_url > 0 && <a target="_blank" href={`${apiUrl}/url/${short_url}`}>{`${apiUrl}`+ "/url/" + `${short_url}`}</a>}
+      <div className="url-container">
+        <p ref={myRef}>Your short URL is: </p>
+        {short_url > 0 && (
+          <a target="_blank" href={`${apiUrl}/url/${short_url}`}>
+            {`${apiUrl}` + "/url/" + `${short_url}`}
+          </a>
+        )}
+      </div>
     </div>
   );
 }

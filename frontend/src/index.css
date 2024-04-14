@@ -58,3 +58,9 @@ button{
   width: 30px;
   border-radius: 50%;
 }
+.url-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
